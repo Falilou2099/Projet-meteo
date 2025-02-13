@@ -1,0 +1,135 @@
+1. Utilisateurs (Users)
+user_id (PK) : Identifiant unique de l'utilisateur
+username : Nom d'utilisateur
+email : Adresse email
+password : Mot de passe chiffré
+date_of_creation : Date de création du compte
+role (FK vers Roles) : Rôle de l'utilisateur
+profile_picture : URL de l'image de profil
+bio : Courte biographie de l'utilisateur
+is_verified : Statut de vérification de l'utilisateur (booléen)
+2. Streams
+stream_id (PK) : Identifiant unique du stream
+user_id (FK vers Users) : Identifiant du streamer
+category_id (FK vers Categories) : Identifiant de la catégorie du stream
+title : Titre du stream
+start_time : Date et heure de début du stream
+end_time : Date et heure de fin du stream (nullable si encore live)
+is_live : Statut du stream (booléen)
+view_count : Nombre de vues
+3. VODs (Video on Demand)
+vod_id (PK) : Identifiant unique de la VOD
+stream_id (FK vers Streams) : Identifiant du stream associé
+title : Titre de la VOD
+upload_time : Date et heure de mise en ligne
+duration : Durée de la VOD (en secondes)
+4. Clips
+clip_id (PK) : Identifiant unique du clip
+user_id (FK vers Users) : Identifiant du créateur du clip
+stream_id (FK vers Streams) : Identifiant du stream d'origine
+title : Titre du clip
+creation_time : Date et heure de création
+clip_url : URL du clip
+view_count : Nombre de vues du clip
+5. Chats
+chat_id (PK) : Identifiant unique du chat
+stream_id (FK vers Streams) : Identifiant du stream associé
+user_id (FK vers Users) : Identifiant de l'utilisateur qui envoie le message
+message : Contenu du message
+timestamp : Date et heure d'envoi du message
+6. Emotes
+emote_id (PK) : Identifiant unique de l’emote
+name : Nom de l’emote
+image_url : URL de l’image de l’emote
+user_id (FK vers Users, nullable) : Créateur de l’emote (si spécifique à un utilisateur)
+is_global : Booléen indiquant si l'emote est globale
+7. Badges
+badge_id (PK) : Identifiant unique du badge
+name : Nom du badge
+description : Description du badge
+image_url : URL de l'image du badge
+is_global : Booléen indiquant si le badge est global
+requirements : Conditions pour obtenir le badge (ex. abonnement)
+8. Catégories (Categories)
+category_id (PK) : Identifiant unique de la catégorie
+name : Nom de la catégorie (ex. jeu vidéo, talk-show)
+description : Brève description de la catégorie
+image_url : URL de l'image de la catégorie
+9. Tags
+tag_id (PK) : Identifiant unique du tag
+name : Nom du tag
+description : Brève description du tag
+10. Followers
+follower_id (PK) : Identifiant unique du lien de suivi
+follower_user_id (FK vers Users) : Utilisateur qui suit
+followed_user_id (FK vers Users) : Utilisateur suivi
+follow_date : Date de début du suivi
+11. Abonnements (Subscriptions)
+subscription_id (PK) : Identifiant unique de l'abonnement
+user_id (FK vers Users) : Utilisateur abonné
+streamer_id (FK vers Users) : Streamer auquel l'utilisateur est abonné
+subscription_tier : Niveau de l'abonnement (Tier 1, 2, 3)
+subscription_date : Date de début de l'abonnement
+is_active : Statut de l'abonnement (booléen)
+12. Dons (Donations)
+donation_id (PK) : Identifiant unique du don
+user_id (FK vers Users) : Utilisateur ayant fait le don
+streamer_id (FK vers Users) : Streamer ayant reçu le don
+amount : Montant du don
+donation_date : Date du don
+message : Message joint au don (nullable)
+13. Publicités (Ads)
+ad_id (PK) : Identifiant unique de la publicité
+stream_id (FK vers Streams) : Identifiant du stream durant lequel l'annonce a été diffusée
+advertiser_name : Nom de l'annonceur
+ad_start_time : Heure de début de la publicité
+ad_end_time : Heure de fin de la publicité
+ad_duration : Durée de la publicité en secondes
+14. Modérateurs (Moderators)
+moderator_id (PK) : Identifiant unique du modérateur
+user_id (FK vers Users) : Identifiant de l'utilisateur modérateur
+streamer_id (FK vers Users) : Identifiant du streamer pour lequel l'utilisateur est modérateur
+mod_start_date : Date de début des fonctions de modération
+15. Rapports (Reports)
+report_id (PK) : Identifiant unique du rapport
+reporter_id (FK vers Users) : Identifiant de l'utilisateur ayant soumis le rapport
+reported_user_id (FK vers Users) : Identifiant de l'utilisateur rapporté
+report_reason : Raison du rapport
+report_date : Date de soumission du rapport
+status : Statut du rapport (en cours, résolu, rejeté)
+16. Banissements (Bans)
+ban_id (PK) : Identifiant unique du ban
+user_id (FK vers Users) : Identifiant de l'utilisateur banni
+moderator_id (FK vers Moderators) : Modérateur ayant exécuté le ban
+ban_reason : Raison du ban
+ban_date : Date du ban
+is_permanent : Indique si le ban est permanent
+17. Abonnements à des tags (Tag Subscriptions)
+tag_subscription_id (PK) : Identifiant unique de l'abonnement au tag
+user_id (FK vers Users) : Identifiant de l'utilisateur
+tag_id (FK vers Tags) : Tag auquel l'utilisateur est abonné
+subscription_date : Date d'abonnement au tag
+18. Polls (Sondages)
+poll_id (PK) : Identifiant unique du sondage
+stream_id (FK vers Streams) : Stream dans lequel le sondage est lancé
+question : Question posée
+creation_time : Date et heure de création du sondage
+is_active : Statut du sondage (ouvert/fermé)
+19. Poll Options (Options de sondage)
+option_id (PK) : Identifiant unique de l'option
+poll_id (FK vers Polls) : Sondage associé
+option_text : Texte de l'option
+vote_count : Nombre de votes reçus
+20. Achievements (Réalisations)
+achievement_id (PK) : Identifiant unique de la réalisation
+name : Nom de la réalisation
+description : Description de l'objectif
+points : Points gagnés pour cette réalisation
+21. User Achievements (Réalisations des utilisateurs)
+user_achievement_id (PK) : Identifiant unique de la réalisation utilisateur
+user_id (FK vers Users) : Identifiant de l'utilisateur
+achievement_id (FK vers Achievements) : Identifiant de la réalisation
+date_achieved : Date d'accomplissement
+22. Notifications
+notification_id (PK) : Identifiant unique de la notification
+user_id (FK vers Users) : Identifiant de l'utilisateur recevant la notification

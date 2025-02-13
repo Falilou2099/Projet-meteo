@@ -1,0 +1,123 @@
+23. Notifications (suite)
+notification_id (PK) : Identifiant unique de la notification
+user_id (FK vers Users) : Identifiant de l'utilisateur recevant la notification
+notification_type : Type de notification (nouveau follower, nouvelle message, nouvelle vidéo, etc.)
+message : Contenu du message de la notification
+is_read : Statut de lecture (booléen)
+timestamp : Date et heure d'envoi de la notification
+24. Roles
+role_id (PK) : Identifiant unique du rôle
+role_name : Nom du rôle (viewer, streamer, modérateur, administrateur)
+permissions : Liste des permissions associées au rôle (ex : view_streams, moderate_chats)
+25. Payments (Paiements)
+payment_id (PK) : Identifiant unique du paiement
+user_id (FK vers Users) : Identifiant de l'utilisateur ayant effectué le paiement
+payment_method : Méthode de paiement (carte bancaire, PayPal, etc.)
+amount : Montant du paiement
+payment_date : Date du paiement
+subscription_id (FK vers Subscriptions, nullable) : Identifiant de l'abonnement payé (nullable si don)
+26. User Preferences (Préférences utilisateur)
+preference_id (PK) : Identifiant unique de la préférence
+user_id (FK vers Users) : Identifiant de l'utilisateur
+preference_type : Type de préférence (ex. notifications, thème)
+value : Valeur de la préférence (ex. activé/désactivé)
+27. User Devices
+device_id (PK) : Identifiant unique de l'appareil
+user_id (FK vers Users) : Identifiant de l'utilisateur
+device_type : Type d'appareil (ordinateur, mobile, tablette)
+device_os : Système d'exploitation (iOS, Android, Windows, etc.)
+device_name : Nom de l'appareil (ex. iPhone 12, PC Gamer)
+last_used : Date et heure de la dernière utilisation
+28. User Sessions
+session_id (PK) : Identifiant unique de la session
+user_id (FK vers Users) : Identifiant de l'utilisateur
+login_time : Date et heure de connexion
+logout_time : Date et heure de déconnexion (nullable si toujours connecté)
+ip_address : Adresse IP utilisée pour la session
+29. Stream Likes (Aime des streams)
+like_id (PK) : Identifiant unique du "like"
+user_id (FK vers Users) : Utilisateur ayant aimé le stream
+stream_id (FK vers Streams) : Identifiant du stream aimé
+like_date : Date à laquelle le like a été ajouté
+30. Stream Tags
+stream_tag_id (PK) : Identifiant unique du lien stream-tag
+stream_id (FK vers Streams) : Identifiant du stream
+tag_id (FK vers Tags) : Identifiant du tag
+31. Advertisers (Annonceurs)
+advertiser_id (PK) : Identifiant unique de l'annonceur
+name : Nom de l'annonceur
+contact_email : Adresse email de contact de l'annonceur
+company_name : Nom de la société (si applicable)
+32. Advertising Campaigns (Campagnes publicitaires)
+campaign_id (PK) : Identifiant unique de la campagne publicitaire
+advertiser_id (FK vers Advertisers) : Identifiant de l'annonceur
+start_date : Date de début de la campagne
+end_date : Date de fin de la campagne
+budget : Budget alloué à la campagne
+33. Stream Advertisements (Publicités de stream)
+stream_ad_id (PK) : Identifiant unique de l'advertisement dans un stream
+stream_id (FK vers Streams) : Identifiant du stream où l'annonce est diffusée
+campaign_id (FK vers Advertising Campaigns) : Identifiant de la campagne publicitaire
+ad_start_time : Heure de début de l'affichage de la publicité
+ad_end_time : Heure de fin de la publicité
+34. Channel Moderation Actions (Actions de modération des chaînes)
+mod_action_id (PK) : Identifiant unique de l'action de modération
+moderator_id (FK vers Moderators) : Identifiant du modérateur
+user_id (FK vers Users) : Utilisateur affecté par l'action
+action_type : Type d'action (bannissement, timeout, suppression de message)
+action_reason : Raison de l'action de modération
+timestamp : Date et heure de l'action
+35. Subscriptions Tiers (Niveaux d'abonnement)
+tier_id (PK) : Identifiant unique du niveau d'abonnement
+name : Nom du niveau d'abonnement (Tier 1, Tier 2, Tier 3)
+price : Prix mensuel de l'abonnement pour ce niveau
+benefits : Liste des avantages (emotes, badges, accès exclusif)
+36. Channel Points
+points_id (PK) : Identifiant unique des points de chaîne
+user_id (FK vers Users) : Utilisateur ayant gagné les points
+streamer_id (FK vers Users) : Streamer associé à ces points
+points_amount : Montant de points de chaîne accumulés
+points_date : Date de gain des points
+37. Channel Points Rewards
+reward_id (PK) : Identifiant unique de la récompense
+streamer_id (FK vers Users) : Streamer ayant créé la récompense
+reward_name : Nom de la récompense
+points_required : Points nécessaires pour débloquer la récompense
+is_active : Statut actif/inactif de la récompense
+38. Channel Points Redemptions
+redemption_id (PK) : Identifiant unique de la rédemption des points
+user_id (FK vers Users) : Utilisateur ayant réclamé la récompense
+reward_id (FK vers Channel Points Rewards) : Récompense demandée
+redemption_date : Date de la rédemption
+status : Statut de la rédemption (en attente, complété)
+39. Viewer Activity (Activité des spectateurs)
+activity_id (PK) : Identifiant unique de l'activité
+user_id (FK vers Users) : Utilisateur (spectateur) ayant interagi
+stream_id (FK vers Streams) : Stream où l'interaction a eu lieu
+activity_type : Type d'activité (visionnage, commentaire, like, etc.)
+activity_time : Heure de l'activité
+40. Stream Categories History
+category_history_id (PK) : Identifiant unique de l'historique de catégorie
+stream_id (FK vers Streams) : Identifiant du stream
+category_id (FK vers Categories) : Catégorie associée à un moment donné
+start_time : Heure de début dans cette catégorie
+end_time : Heure de fin dans cette catégorie (nullable)
+41. Stream Chat Bans
+chat_ban_id (PK) : Identifiant unique du ban dans le chat
+user_id (FK vers Users) : Utilisateur banni du chat
+moderator_id (FK vers Moderators) : Modérateur ayant exécuté le ban
+stream_id (FK vers Streams) : Stream où le ban a eu lieu
+ban_reason : Raison du ban
+ban_date : Date du ban
+is_temporary : Indique si le ban est temporaire
+ban_duration : Durée du ban (nullable si permanent)
+42. Stream Events
+event_id (PK) : Identifiant unique de l'événement
+stream_id (FK vers Streams) : Identifiant du stream
+event_type : Type d'événement (abonnement, don, raid, etc.)
+event_user_id (FK vers Users) : Utilisateur ayant déclenché l'événement (ex. utilisateur ayant fait un don)
+event_time : Heure de l'événement
+43. Stream Raids
+raid_id (PK) : Identifiant unique du raid
+stream_id (FK vers Streams) : Identifiant du stream ayant lancé le raid
+target_stream_id (FK vers Streams) : Identifiant du stream cible
