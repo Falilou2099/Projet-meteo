@@ -1,6 +1,4 @@
-Bien sûr, voici un exemple de README pour votre application météo développée avec Next.js, utilisant les API d'OpenWeather et de Google Maps :
 
----
 
 # 🌤️ Application Météo
 
@@ -66,5 +64,3 @@ Accédez à l'application via `http://localhost:3000`.
 Ce projet est open-source et peut être utilisé et modifié librement.
 
 ---
-
-N'hésitez pas à adapter ce README en fonction des spécificités de votre projet. 😊🚀 
