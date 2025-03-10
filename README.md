@@ -30,7 +30,7 @@ Cette application fournit des informations météorologiques en temps réel pour
 ### 2️⃣ Cloner le projet
 
 ```bash
-git clone https://github.com/votre-utilisateur/nom-du-repo.git
+git clone https://github.com/Falilou2099/Projet-meteo.git
 cd nom-du-repo
 ```
 
