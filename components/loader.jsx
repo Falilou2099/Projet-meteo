@@ -1,14 +1,13 @@
-useEffect(() => {
-    // Simuler le chargement des données
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000); // 2 secondes de délai pour simuler le chargement
-  }, []);
-  
-  if (loading) {
-    return (
-      <div className="loader">
-      <img src="./image/F.png" alt="loader" />
-      </div>
-    );
-  }
+import React from 'react';
+import './loader.css';
+
+const Loader = () => {
+  return (
+    <div className="loader-container">
+      <div className="loader-spinner"></div>
+      <p className="loader-text">Chargement en cours...</p>
+    </div>
+  );
+};
+
+export default Loader;

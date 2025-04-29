@@ -6,12 +6,15 @@ import Image from "next/image";
 import Link from "next/link"; 
 import axios from "axios"; // Importer axios pour faire des requêtes HTTP
 import MiniMap from "@/components/MiniMap";
+import Loader from "@/components/loader";
 
 export default function Home() {
   const [city, setCity] = useState("Paris"); // Ville par défaut
   const [weather, setWeather] = useState(null);
   const [weeklyForecast, setWeeklyForecast] = useState(null);
   const [hourlyForecast, setHourlyForecast] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
   const API_KEY = "d53c6e875f28d342c4e2a372763d30fa"; // Remplacez par votre clé API
 
   // Fonction pour récupérer la météo actuelle
@@ -51,8 +54,6 @@ export default function Home() {
     setCity(inputValue);
   };
 
-  //loader
-  const [loading, setLoading] = useState(true);
   useEffect(() => {
     // Simuler le chargement des données
     setTimeout(() => {
@@ -61,11 +62,7 @@ export default function Home() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="loader">
-        <img src="./image/F.png" alt="loader" />
-      </div>
-    );
+    return <Loader />;
   }
 
   const uniqueDays = {};
@@ -87,112 +84,91 @@ if (weather) {
   filteredForecast.unshift(weather); // Ajoutez la météo actuelle au début
 }
 
+  // Fonctions pour gérer l'ouverture/fermeture du menu mobile
+
+  // Fonction pour basculer l'état du menu
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  // Fonction pour fermer le menu après avoir sélectionné une ville
+  const selectCity = (cityName) => {
+    setCity(cityName);
+    setMenuOpen(false);
+  };
+
   return ( 
     <div className="container">
-      <div className="today-weather">
-        <div className="search-container">
-          <form onSubmit={handleSearch}>
-            <input
-              type="text"
-              name="city"
-              placeholder="Rechercher une ville..."
-              className="search-input"
-            />
-            <button className="search-button" type="submit">
-              🔍
-            </button>
-          </form>
+      <div className="search-container">
+        <form onSubmit={handleSearch}>
+          <input
+            type="text"
+            name="city"
+            placeholder="Rechercher une ville..."
+            className="search-input"
+          />
+          <button className="search-button" type="submit">
+            🔍
+          </button>
+        </form>
+      </div>
+
+      <nav className={`navbar ${menuOpen ? 'active' : ''}`}>
+        <div className="menu-toggle" onClick={toggleMenu}>
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
+        <ul>
+          <li><Link href="#" onClick={() => selectCity("Paris")}>Paris</Link></li>
+          <li><Link href="#" onClick={() => selectCity("Lyon")}>Lyon</Link></li>
+          <li><Link href="#" onClick={() => selectCity("Marseille")}>Marseille</Link></li>
+          <li><Link href="#" onClick={() => selectCity("Toulouse")}>Toulouse</Link></li>
+          <li><Link href="#" onClick={() => selectCity("Nice")}>Nice</Link></li>
+          <li><Link href="#" onClick={() => selectCity("Bordeaux")}>Bordeaux</Link></li>
+        </ul>
+      </nav>
 
-        <nav className="navbar scrollmenu">
-          <ul>
-            <li>
-              <Link href="#" onClick={() => setCity("Paris")}>
-                Paris
-              </Link>
-            </li>
-            <li>
-              <Link href="#" onClick={() => setCity("Lyon")}>
-                Lyon
-              </Link>
-            </li>
-            <li>
-              <Link href="#" onClick={() => setCity("Marseille")}>
-                Marseille
-              </Link>
-            </li>
-            <li>
-              <Link href="#" onClick={() => setCity("Toulouse")}>
-                Toulouse
-              </Link>
-            </li>
-            <li>
-              <Link href="#" onClick={() => setCity("Nice")}>
-                Nice
-              </Link>
-            </li>
-            <li>
-              <Link href="#" onClick={() => setCity("Bordeaux")}>
-                Bordeaux
-              </Link>
-            </li>
-          </ul>
-        </nav>
-
-        {weather && (
+      {weather && (
+        <div className="today-weather">
           <div className="today-info-container">
             <div className="day-item">
-              <h1>Aujourd'hui</h1>
-              <div className="city-time">
-                <p className="city">{weather.name}</p>
-                <p className="time">{new Date().toLocaleTimeString()}</p>
-              </div>
-              <div className="info">
-                <p className="temperature">{weather.main.temp}°C</p>
-                <p className="weather">{weather.weather[0].description}</p>{" "}
-                {/* [0] ajouté pour corriger l'erreur */}
-              </div>
+              <h1>Aujourd'hui à {weather.name}</h1>
+              <div className="time">{new Date().toLocaleTimeString().substring(0, 5)}</div>
+              <p className="temperature">{Math.round(weather.main.temp)}°C</p>
+              <p className="weather">{weather.weather[0].description}</p>
               <div className="additional-info">
-                <p className="wind-speed">💨 {weather.wind.speed} m/s</p>
-                <p className="humidity">💧: {weather.main.humidity}%</p>
+                <p className="wind-speed">💨 {weather.wind.speed}m/s</p>
+                <p className="humidity">💧 {weather.main.humidity}%</p>
               </div>
               <div className="icon">
-                <img src={getWeatherIcon(weather.weather[0].icon)} />
+                <img src={getWeatherIcon(weather.weather[0].icon)} alt="Weather icon" width="40" height="40" />
               </div>
             </div>
 
-            {/* Ajouter la MiniMap ici */}
             <div className="mini-map">
               <MiniMap city={city} />
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {weeklyForecast && (
-          <div className="weekly-weather">
-            <div className="weekly-forecast">
-              {filteredForecast.map((weather, index) => (
-                <div key={index} className="day-item">
-                  <h3>{getDayOfWeek(new Date(weather.dt * 1000))}</h3>
-
-                  <div className="icon2">
-                    <img src={getWeatherIcon(weather.weather[0].icon)} />
-                  </div>
-                  <div className="info2">
-                    <p className="temperature2">
-                      Min: {weather.main.temp_min}°C
-                    </p>
-                    <p className="temperature2">
-                      Max: {weather.main.temp_max}°C
-                    </p>
-                    <p className="humidite2">💧: {weather.main.humidity}%</p>
-                  </div>
+      {weeklyForecast && (
+        <div className="weekly-weather">
+          <div className="weekly-forecast">
+            {filteredForecast.slice(0, 5).map((weather, index) => (
+              <div key={index} className="day-item">
+                <h3>{getDayOfWeek(new Date(weather.dt * 1000)).substring(0, 3)}</h3>
+                <div className="icon2">
+                  <img src={getWeatherIcon(weather.weather[0].icon)} alt="Weather icon" width="40" height="40" />
                 </div>
-              ))}
-            </div>
+                <p className="temperature2">{Math.round(weather.main.temp_min)}°/{Math.round(weather.main.temp_max)}°</p>
+                <p className="humidite2">💧 {weather.main.humidity}%</p>
+              </div>
+            ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
